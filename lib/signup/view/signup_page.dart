@@ -1,10 +1,13 @@
 // ignore_for_file: unused_field, inference_failure_on_instance_creation
 
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/helper/auth_helper.dart';
 import 'package:todoapp/home/view/home_page.dart';
 import 'package:todoapp/login/login.dart';
+import 'package:todoapp/util/regex.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -17,20 +20,12 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  RegExp emailRegex = RegExp(
-    r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$',
-    caseSensitive: false,
-  );
-
-  RegExp passwordRegex = RegExp(
-    r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-    caseSensitive: false,
-  );
   SignUpModel model = SignUpModel();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('SignUp'),
       ),
@@ -43,6 +38,19 @@ class _SignupPageState extends State<SignupPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text('SignUp', style: Theme.of(context).textTheme.titleLarge),
+                TextFormField(
+                  keyboardType: TextInputType.name,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Name is required';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) => model.name = newValue,
+                ),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
@@ -90,15 +98,18 @@ class _SignupPageState extends State<SignupPage> {
                             .createUserWithEmail(
                               email: model.email!,
                               password: model.password!,
+                              name: model.name!,
                             )
-                            .then((value) => Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomePage(),
-                                  ),
-                                ));
+                            .then(
+                              (value) => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomePage(),
+                                ),
+                              ),
+                            );
                       } catch (e) {
-                        print(e);
+                        log(e.toString());
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(e.toString()),
@@ -188,7 +199,9 @@ class SignUpModel {
   SignUpModel({
     this.email,
     this.password,
+    this.name,
   });
   String? email;
   String? password;
+  String? name;
 }

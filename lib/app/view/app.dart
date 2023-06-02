@@ -1,9 +1,14 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/l10n/l10n.dart';
 import 'package:todoapp/login/login.dart';
+import 'package:todoapp/splash/view/splash_page.dart';
+import 'package:todoapp/util/prefs.dart';
 
 Client client = Client();
+Prefs prefs = Prefs();
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -35,7 +40,7 @@ class _AppState extends State<App> {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const LoginPage(),
+      home: const SplashPage(),
     );
   }
 }

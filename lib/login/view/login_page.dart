@@ -2,7 +2,12 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:todoapp/app/view/app.dart';
+import 'package:todoapp/helper/auth_helper.dart';
+import 'package:todoapp/home/view/home_page.dart';
 import 'package:todoapp/signup/view/signup_page.dart';
+import 'package:todoapp/util/prefs.dart';
+import 'package:todoapp/util/regex.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,9 +19,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String? _email;
-  String? _password;
-
+  SignUpModel model = SignUpModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,15 +44,13 @@ class _LoginPageState extends State<LoginPage> {
                     if (value == null || value.isEmpty) {
                       return 'Email is required';
                     }
-                    if (!RegExp(
-                      r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$',
-                    ).hasMatch(value)) {
+                    if (!emailRegex.hasMatch(value)) {
                       return 'Enter a valid email address';
                     }
                     return null;
                   },
                   onSaved: (String? value) {
-                    _email = value;
+                    model.email = value;
                   },
                 ),
                 TextFormField(
@@ -61,18 +62,43 @@ class _LoginPageState extends State<LoginPage> {
                     if (value == null || value.isEmpty) {
                       return 'Password is required';
                     }
+                    if (!passwordRegex.hasMatch(value)) {
+                      return 'Please enter a valid password';
+                    }
                     return null;
                   },
                   onSaved: (String? value) {
-                    _password = value;
+                    model.password = value;
                   },
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      // do something with email and password
+                      final authHelper = AuthHelper();
+                      await authHelper
+                          .loginUserWithEmail(
+                        email: model.email!,
+                        password: model.password!,
+                      )
+                          .then(
+                        (value) {
+                          Prefs.setSessionId(value.$id);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ),
+                          );
+                        },
+                      ).onError((error, stackTrace) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(error.toString()),
+                          ),
+                        );
+                      });
                     }
                   },
                   child: const Text('Login'),
