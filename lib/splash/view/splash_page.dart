@@ -1,4 +1,4 @@
-// ignore_for_file: inference_failure_on_instance_creation, use_build_context_synchronously
+// ignore_for_file: inference_failure_on_instance_creation, use_build_context_synchronously, lines_longer_than_80_chars
 
 import 'package:flutter/material.dart';
 import 'package:todoapp/app/view/app.dart';

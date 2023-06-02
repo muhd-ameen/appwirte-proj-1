@@ -2,9 +2,9 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapp/app/view/app.dart';
 import 'package:todoapp/helper/auth_helper.dart';
 import 'package:todoapp/home/view/home_page.dart';
+import 'package:todoapp/login/view/phone_auth.dart';
 import 'package:todoapp/signup/view/signup_page.dart';
 import 'package:todoapp/util/prefs.dart';
 import 'package:todoapp/util/regex.dart';
@@ -135,8 +135,15 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text('Login with Google'),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Login with Apple'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PhoneAuthScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text('Login with Phone'),
                     ),
                   ],
                 ),

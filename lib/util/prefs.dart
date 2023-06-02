@@ -11,6 +11,10 @@ class Prefs {
     return prefs.setString('session', value);
   }
 
+  static void removeSessionId() {
+    prefs.remove('session');
+  }
+
   static String getSessionId() {
     return prefs.getString('session') ?? '';
   }

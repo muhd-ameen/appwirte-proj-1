@@ -3,7 +3,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapp/l10n/l10n.dart';
-import 'package:todoapp/login/login.dart';
 import 'package:todoapp/splash/view/splash_page.dart';
 import 'package:todoapp/util/prefs.dart';
 
@@ -21,9 +20,9 @@ class _AppState extends State<App> {
   @override
   void initState() {
     client
-        .setEndpoint('https://192.168.1.24/v1')
+        .setEndpoint('https://cloud.appwrite.io/v1')
         // .setProject('6416d47bba80db47be7f')//1
-        .setProject('64172ef86b40fb95bd86') //2
+        .setProject('647a637e68a48b1d204f ') //2
 
         .setSelfSigned(); // For self signed certificates, only use for development
     super.initState();
