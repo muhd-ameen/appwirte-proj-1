@@ -38,18 +38,20 @@ class _SplashPageState extends State<SplashPage> {
       await prefs.init();
       final sessionId = Prefs.getSessionId();
       if (sessionId.isEmpty) {
-        await Navigator.push(
+        await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const LoginPage(),
           ),
+          (route) => false,
         );
       } else {
-        await Navigator.push(
+        await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const HomePage(),
           ),
+          (route) => false,
         );
       }
     });

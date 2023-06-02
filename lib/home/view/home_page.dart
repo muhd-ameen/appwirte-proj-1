@@ -26,8 +26,31 @@ class _HomePageState extends State<HomePage> {
         ],
         title: const Text('Home'),
       ),
-      body: const Center(
-        child: Placeholder(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text('Item $index'),
+            subtitle: Text('Item $index'),
+            leading: CircleAvatar(
+              child: Text('$index'),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Checkbox(value: false, onChanged: (value) {}),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.delete),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

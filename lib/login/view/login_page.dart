@@ -85,11 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                           .then(
                         (value) {
                           Prefs.setSessionId(value.$id);
-                          Navigator.pushReplacement(
+                          Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const HomePage(),
                             ),
+                            (route) => false,
                           );
                         },
                       ).onError((error, stackTrace) {
@@ -146,6 +147,26 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text('Login with Phone'),
                     ),
                   ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    AuthHelper().loginAnounymously().then(
+                          (value) => {
+                            Prefs.setSessionId(value.$id),
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomePage(),
+                              ),
+                              (route) => false,
+                            )
+                          },
+                        );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  child: const Text('Login Anonymously'),
                 ),
                 const SizedBox(height: 10),
                 RichText(

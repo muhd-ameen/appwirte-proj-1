@@ -42,10 +42,19 @@ class AuthHelper {
     }
   }
 
+  Future<model.Session> loginAnounymously() {
+    try {
+      final response = account.createAnonymousSession();
+      return response;
+    } on AppwriteException {
+      rethrow;
+    }
+  }
+
   Future<bool> signOut({required BuildContext context}) async {
     try {
       await account.deleteSessions();
-      Prefs.removeSessionId();
+      Prefs.removeSession();
       // ignore: use_build_context_synchronously
       await Navigator.pushReplacement(
         context,
