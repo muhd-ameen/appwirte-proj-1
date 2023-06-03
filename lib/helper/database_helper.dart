@@ -17,6 +17,17 @@ class DataBaseHelper {
     return url;
   }
 
+  Future<void> deleteImage({required String fileId}) async {
+    try {
+      await storage.deleteFile(
+        fileId: fileId,
+        bucketId: '647b0787b87b8151d5ff',
+      );
+    } on AppwriteException catch (e) {
+      log(e.toString(), name: 'deleteImage');
+    }
+  }
+
   // ignore: flutter_style_todos
   /// create todo document
   Future<model.Document> createTodo({
@@ -26,7 +37,7 @@ class DataBaseHelper {
   }) async {
     final model.Document response;
     try {
-      if (image != null) {
+      if (image != null && image.isNotEmpty) {
         final imageId = await createFileStorage(image);
         log(imageId, name: 'imageId');
         // ignore: join_return_with_assignment
@@ -100,6 +111,7 @@ class DataBaseHelper {
   /// delete todo
   Future<void> deleteTodo({
     required String documentId,
+    required String image,
   }) async {
     try {
       await databases.deleteDocument(
@@ -107,6 +119,9 @@ class DataBaseHelper {
         collectionId: '647a73d7c779cc8d79f8',
         documentId: documentId,
       );
+      if (image.isNotEmpty) {
+        await deleteImage(fileId: image);
+      }
     } on AppwriteException {
       rethrow;
     }
@@ -120,21 +135,6 @@ class DataBaseHelper {
         file: InputFile.fromPath(path: image, filename: 'image.png'),
       );
       return response.$id;
-    } on AppwriteException {
-      rethrow;
-    }
-  }
-
-  Future<List<int>> getFilePreview({
-    required String bucketId,
-    required String fileId,
-  }) async {
-    try {
-      final response = await storage.getFilePreview(
-        bucketId: bucketId,
-        fileId: fileId,
-      );
-      return response;
     } on AppwriteException {
       rethrow;
     }

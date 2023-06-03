@@ -1,0 +1,21 @@
+{
+    "projectId": "647a637e68a48b1d204f",
+    "projectName": "new todo",
+    "functions": [
+        {
+            "$id": "647b1983b4b47ab7c503",
+            "name": "myFunction",
+            "runtime": "dart-2.17",
+            "path": "functions/myFunction",
+            "entrypoint": "lib/main.dart",
+            "ignore": [
+                ".packages",
+                ".dart_tool"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}

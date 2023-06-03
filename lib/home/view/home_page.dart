@@ -100,6 +100,9 @@ class _HomePageState extends State<HomePage> {
                           databaseHelper
                               .deleteTodo(
                                 documentId: todoList!.documents[index].$id,
+                                image: todoList!
+                                    .documents[index].data['picture']
+                                    .toString(),
                               )
                               .then(
                                 (value) => setState(
