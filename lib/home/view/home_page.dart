@@ -1,5 +1,7 @@
 // ignore_for_file: cascade_invocations, inference_failure_on_instance_creation, lines_longer_than_80_chars
 
+import 'dart:developer';
+
 import 'package:appwrite/models.dart' as model;
 import 'package:flutter/material.dart';
 import 'package:todoapp/add_todo/view/add_todo_view.dart';
@@ -51,7 +53,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: todoList == null || todoList!.documents.isEmpty || isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: Text('No data found'),
             )
           : ListView.builder(
               itemCount: todoList!.documents.length,
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                     todoList!.documents[index].data['title'].toString(),
                   ),
                   subtitle: Text(
-                    todoList!.documents[index].data['image'].toString(),
+                    todoList!.documents[index].data['picture'].toString(),
                   ),
                   leading: CircleAvatar(
                     child: Text('${index + 1}'),
@@ -69,20 +71,13 @@ class _HomePageState extends State<HomePage> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (todoList!.documents[index].data['image'] != null)
-                        FutureBuilder(
-                          future: DataBaseHelper().storage.getFilePreview(
-                                fileId: todoList!.documents[index].data['image']
-                                    as String,
-                                bucketId: '647b0787b87b8151d5ff',
-                              ),
-                          builder: (context, snapshot) {
-                            return snapshot.hasData
-                                ? Image.memory(
-                                    snapshot.data!,
-                                  )
-                                : const CircularProgressIndicator();
-                          },
+                      if (todoList!.documents[index].data['picture'] != null)
+                        Image.network(
+                          DataBaseHelper().getImageUrl(
+                            bucketId: '647b0787b87b8151d5ff',
+                            fileId: todoList!.documents[index].data['picture']
+                                .toString(),
+                          ),
                         ),
                       Checkbox(
                         value: todoList!.documents[index].data['isCompleted']
@@ -129,7 +124,9 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
     final databaseHelper = DataBaseHelper();
+
     todoList = await databaseHelper.getAllTodos();
+    print(todoList!.documents.length);
     setState(() {
       isLoading = false;
     });

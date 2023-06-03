@@ -19,6 +19,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
   TodoModel todoModel = TodoModel(
     title: '',
     description: '',
+    image: '',
   );
 
   @override
@@ -70,6 +71,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                   if (image != null) {
                     setState(() {
                       todoModel.image = image.path;
+                      print('${todoModel.image}picked image path');
                     });
                   }
                 },
